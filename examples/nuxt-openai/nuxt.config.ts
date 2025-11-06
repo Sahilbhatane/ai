@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   modules: ['@nuxtjs/tailwindcss'],
 
   nitro: {
-    preset: 'vercel-edge', // you can use 'vercel' or other providers here
+    preset: 'vercel', // changed from 'vercel-edge' to avoid rollup inject issue
   },
 
   runtimeConfig: {

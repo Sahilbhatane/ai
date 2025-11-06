@@ -1,0 +1,39 @@
+import { google } from '@ai-sdk/google';
+import { generateObject } from 'ai';
+import 'dotenv/config';
+import { z } from 'zod';
+
+async function main() {
+  try {
+    const result = await generateObject({
+      model: google('gemini-2.0-flash'),
+      mode: 'tool',
+      schema: z.object({
+        recipe: z.object({
+          name: z.string(),
+          ingredients: z.array(
+            z.object({
+              name: z.string(),
+              amount: z.string(),
+            }),
+          ),
+          steps: z.array(z.string()),
+        }),
+      }),
+      prompt: 'Generate a lasagna recipe.',
+    });
+
+    console.log(JSON.stringify(result.object.recipe, null, 2));
+    console.log();
+    console.log('Token usage:', result.usage);
+    console.log('Finish reason:', result.finishReason);
+  } catch (error) {
+    console.error(
+      'ERROR:',
+      error instanceof Error ? error.message : String(error),
+    );
+    console.error('Full error:', error);
+  }
+}
+
+main().catch(console.error);
